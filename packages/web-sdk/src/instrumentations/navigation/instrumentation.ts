@@ -5,6 +5,7 @@ import { monitorDomMutations } from '../_internal/monitors/domMutationMonitor';
 import { monitorHttpRequests } from '../_internal/monitors/httpRequestMonitor';
 import { monitorInteractions } from '../_internal/monitors/interactionMonitor';
 import { monitorUrlChanges } from '../_internal/monitors/urlChangeMonitor';
+import { performanceObserverSupported } from '../performance/performanceUtils';
 
 export class NavigationInstrumentation extends BaseInstrumentation {
   readonly name = '@grafana/faro-web-sdk:instrumentation-navigation';
@@ -48,5 +49,47 @@ export class NavigationInstrumentation extends BaseInstrumentation {
     interactionMonitor.subscribe(() => {
       activityWindowTracker.startTracking();
     });
+
+    this.trackHardNavigation();
+  }
+
+  private trackHardNavigation(): void {
+    if (!performanceObserverSupported()) {
+      return;
+    }
+
+    const observeNavigationEntry = () => {
+      const observer = new PerformanceObserver((list) => {
+        const [entry] = list.getEntries() as Array<PerformanceNavigationTiming & { activationStart?: number }>;
+
+        if (entry == null) {
+          return;
+        }
+
+        observer.disconnect();
+
+        // prerendered pages count from activation, the time the user actually saw the page
+        const duration = Math.max(entry.duration - (entry.activationStart ?? 0), 0);
+
+        faro.api.pushEvent('faro.navigation', {
+          fromUrl: document.referrer,
+          toUrl: entry.name,
+          sameDocument: String(false),
+          duration: String(duration),
+        });
+      });
+
+      try {
+        observer.observe({ type: 'navigation', buffered: true });
+      } catch {
+        this.logDebug('navigation entries not supported, hard page load navigation is not tracked');
+      }
+    };
+
+    if ((document as Document & { prerendering?: boolean }).prerendering) {
+      document.addEventListener('prerenderingchange', observeNavigationEntry, { once: true });
+    } else {
+      observeNavigationEntry();
+    }
   }
 }
