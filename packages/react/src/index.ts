@@ -23,12 +23,16 @@ export {
   createReactRouterV6DataOptions,
   createReactRouterV7Options,
   createReactRouterV7DataOptions,
+  createTanStackRouterOptions,
   setReactRouterV4V5SSRDependencies,
   setReactRouterV6SSRDependencies,
   setReactRouterV7SSRDependencies,
   withFaroRouterInstrumentation,
 } from './router';
 export type {
+  TanStackRouter,
+  TanStackRouterDependencies,
+  TanStackRouterLocation,
   ReactRouterHistory,
   ReactRouterLocation,
   ReactRouterV4V5ActiveEvent,
@@ -47,6 +51,7 @@ export type {
 } from './router';
 
 export type {
+  TanStackRouterConfig,
   ReactIntegrationConfig,
   ReactRouterV4V5Config,
   ReactRouterV6Config,

@@ -4,6 +4,12 @@ import type {
   ReactRouterV6Dependencies,
   ReactRouterVersion,
 } from './router';
+import type { TanStackRouterDependencies } from './router/tanstack';
+
+export interface TanStackRouterConfig {
+  version: 'tanstack-v1';
+  dependencies: TanStackRouterDependencies;
+}
 
 export interface ReactRouterV4V5Config {
   version: ReactRouterVersion.V4 | ReactRouterVersion.V5;
@@ -37,5 +43,6 @@ export interface ReactIntegrationConfig {
     | ReactRouterV6Config
     | ReactRouterV6DataRouterConfig
     | ReactRouterV7Config
-    | ReactRouterV7DataRouterConfig;
+    | ReactRouterV7DataRouterConfig
+    | TanStackRouterConfig;
 }

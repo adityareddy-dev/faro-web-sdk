@@ -1,4 +1,6 @@
 export { initializeReactRouterInstrumentation } from './initialize';
+export { createTanStackRouterOptions } from './tanstack';
+export type { TanStackRouter, TanStackRouterDependencies, TanStackRouterLocation } from './tanstack';
 
 export { NavigationType, ReactRouterVersion } from './types';
 export type { ReactRouterLocation, ReactRouterHistory } from './types';

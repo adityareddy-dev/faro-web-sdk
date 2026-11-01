@@ -4,6 +4,7 @@
 
 ### Features
 
+- **react:** add TanStack Router v1 integration for resolved route changes and view names
 - **web-sdk:** enable navigation instrumentation by default. Pass `trackNavigation: false` to
   `getWebInstrumentations()` or omit `NavigationInstrumentation` from a custom `instrumentations` array to disable it.
   The deprecated `experimental.trackNavigation` option remains supported as a fallback for compatibility.
