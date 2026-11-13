@@ -5,12 +5,12 @@ import { mockConfig } from '@grafana/faro-core/src/testUtils';
 
 import { getDefaultOTELInstrumentations } from './getDefaultOTELInstrumentations';
 import { TracingInstrumentation } from './instrumentation';
+import { resetTracingOwnerForTests } from './tracingOwner';
 
 jest.mock('@opentelemetry/instrumentation', () => ({
   ...jest.requireActual('@opentelemetry/instrumentation'),
   registerInstrumentations: jest.fn(),
 }));
-jest.mock('@opentelemetry/sdk-trace');
 jest.mock('./getDefaultOTELInstrumentations');
 
 class TestTransport extends BaseTransport {
@@ -38,7 +38,10 @@ function setup(options = {}) {
   return { instrumentation, faro };
 }
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+  jest.clearAllMocks();
+  resetTracingOwnerForTests();
+});
 
 it('updates both default instrumentations, preserves options and stops listening on destroy', () => {
   const fetch = { getConfig: () => ({ ignoreNetworkEvents: false }), setConfig: jest.fn() };
