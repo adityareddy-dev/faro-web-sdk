@@ -10,6 +10,7 @@ jest.mock('@opentelemetry/instrumentation', () => ({
   ...jest.requireActual('@opentelemetry/instrumentation'),
   registerInstrumentations: jest.fn(),
 }));
+jest.mock('@opentelemetry/sdk-trace');
 jest.mock('./getDefaultOTELInstrumentations');
 
 class TestTransport extends BaseTransport {
